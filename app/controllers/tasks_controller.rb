@@ -14,7 +14,7 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = Task.new(task_params.merge(creator_id: @current_user.id))
+    @task = Task.new(task_params.merge(task_owner_id: @current_user.id))
     authorize @task
     if @task.save
       render status: :ok,
