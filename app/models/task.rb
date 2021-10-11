@@ -5,6 +5,8 @@ class Task < ApplicationRecord
   validates :slug, uniqueness: true
   validate :slug_not_changed
 
+  RESTRICTED_ATTRIBUTES = %i[title user_id]
+  enum progress: { pending: 0, completed: 1 }
   has_many :comments, dependent: :destroy
 
   before_create :set_slug
