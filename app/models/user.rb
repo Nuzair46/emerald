@@ -16,6 +16,8 @@ class User < ApplicationRecord
   validates :password, length: { minimum: 6 }, if: -> { password.present? }
   validates :password_confirmation, presence: true, on: :create
 
+  has_many :comments, dependent: :destroy
+
   before_save :to_lowercase
   before_destroy :assign_tasks_to_task_owners
 
