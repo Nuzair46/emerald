@@ -59,3 +59,5 @@ gem "react-rails"
 
 # The bcrypt gem allows us to get hash of the password in a secure manner.
 gem "bcrypt", "~> 3.1.13"
+
+gem "simplecov", require: false, group: :test
