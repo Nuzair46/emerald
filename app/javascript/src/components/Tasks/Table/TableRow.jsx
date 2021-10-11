@@ -1,69 +1,44 @@
 import React from "react";
 
-import classnames from "classnames";
 import PropTypes from "prop-types";
 
-const TableRow = ({
-  type = "pending",
-  data,
-  destroyTask,
-  showTask,
-  handleProgressToggle
-}) => {
-  const isCompleted = type === "completed";
-  const toggledProgress = isCompleted ? "pending" : "completed";
-
+const TableRow = ({ data, destroyTask, showTask }) => {
   return (
-    <tbody className="bg-white divide-y divide-bb-gray-600">
+    <tbody className="bg-white divide-y divide-gray-200">
       {data.map(rowData => (
         <tr key={rowData.id}>
-          <td className="px-6 py-4 text-center">
-            <input
-              type="checkbox"
-              checked={isCompleted}
-              className="ml-6 w-4 h-4 text-bb-purple border-gray-300
-               rounded form-checkbox focus:ring-bb-purple cursor-pointer"
-              onChange={() =>
-                handleProgressToggle({
-                  slug: rowData.slug,
-                  progress: toggledProgress
-                })
-              }
-            />
-          </td>
           <td
-            className={classnames(
-              "block w-64 px-6 py-4 text-sm font-medium leading-8 text-bb-purple capitalize truncate",
-              {
-                "cursor-pointer": !isCompleted
-              },
-              { "text-opacity-50": isCompleted }
-            )}
-            onClick={() => !isCompleted && showTask(rowData.slug)}
+            className="block w-64 px-6 py-4 text-sm font-medium
+            leading-8 text-bb-purple capitalize truncate"
           >
             {rowData.title}
           </td>
-          {!isCompleted && (
-            <td
-              className="px-6 py-4 text-sm font-medium leading-5
-             text-bb-gray-600 whitespace-no-wrap"
+          <td
+            className="px-6 py-4 text-sm font-medium
+            leading-5 text-gray-900 whitespace-no-wrap"
+          >
+            {rowData.assigned_user}
+          </td>
+          <td className="px-6 py-4 text-sm font-medium leading-5 text-right cursor-pointer">
+            <a
+              className="text-bb-purple"
+              onClick={() => showTask(rowData.slug)}
             >
-              {rowData.user.name}
-            </td>
-          )}
-          {isCompleted && (
-            <>
-              <td style={{ width: "164px" }}></td>
-              <td className="px-6 py-4 text-center cursor-pointer">
-                <i
-                  className="text-2xl text-center text-bb-border
-                  transition duration-300 ease-in-out
-                  ri-delete-bin-5-line hover:text-bb-red"
-                  onClick={() => destroyTask(rowData.slug)}
-                ></i>
-              </td>
-            </>
-          )}
+              Show
+            </a>
+          </td>
+          <td
+            className="px-6 py-4 text-sm font-medium
+            leading-5 text-right cursor-pointer"
+          >
+            <a
+              className="text-red-500
+              hover:text-red-700"
+              onClick={() => destroyTask(rowData.slug)}
+            >
+              Delete
+            </a>
+          </td>
         </tr>
       ))}
     </tbody>
@@ -72,10 +47,8 @@ const TableRow = ({
 
 TableRow.propTypes = {
   data: PropTypes.array.isRequired,
-  type: PropTypes.string,
   destroyTask: PropTypes.func,
-  showTask: PropTypes.func,
-  handleProgressToggle: PropTypes.func
+  showTask: PropTypes.func
 };
 
 export default TableRow;

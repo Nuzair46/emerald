@@ -2,16 +2,23 @@
 
 class Task < ApplicationRecord
   validates :title, presence: true, length: { maximum: 50 }
-  belongs_to :user
-  enum progress: { pending: 0, completed: 1 }
-  has_many :comments, dependent: :destroy
   validates :slug, uniqueness: true
   validate :slug_not_changed
-  RESTRICTED_ATTRIBUTES = %i[title user_id]
 
   before_create :set_slug
+  before_validation :set_title, if: :title_not_present
+
+  belongs_to :assigned_user, foreign_key: "assigned_user_id", class_name: "User"
 
   private
+
+    def title_not_present
+      self.title.blank?
+    end
+
+    def set_title
+      self.title = "Pay electricity bill and TV bill"
+    end
 
     def set_slug
       title_slug = title.parameterize
