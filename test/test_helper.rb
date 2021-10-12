@@ -14,6 +14,13 @@ def enable_test_coverage
   end
 end
 
+def headers(user, options = {})
+  {
+    "X-Auth-Token" => user.authentication_token,
+    "X-Auth-Email" => user.email
+  }.merge(options)
+end
+
 enable_test_coverage if ENV["COVERAGE"]
 
 # Previous content of test helper as is
