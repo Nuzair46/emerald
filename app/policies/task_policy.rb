@@ -34,7 +34,7 @@ class TaskPolicy
 
   # Only the user that has created the task, can delete it.
   def destroy?
-    task.creator_id == user.id
+    task.task_owner_id == user.id
   end
 
   class Scope

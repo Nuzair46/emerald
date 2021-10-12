@@ -11,20 +11,11 @@ class Task < ApplicationRecord
   has_many :comments, dependent: :destroy
 
   before_create :set_slug
-  before_validation :set_title, if: :title_not_present
 
   belongs_to :task_owner, foreign_key: "task_owner_id", class_name: "User"
   belongs_to :assigned_user, foreign_key: "assigned_user_id", class_name: "User"
 
   private
-
-    def title_not_present
-      self.title.blank?
-    end
-
-    def set_title
-      self.title = "Pay electricity bill and TV bill"
-    end
 
     def set_slug
       title_slug = title.parameterize
