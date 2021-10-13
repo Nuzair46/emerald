@@ -5,7 +5,7 @@ require "test_helper"
 class CommentsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @task = create(:task)
-    @headers = headers(@task.assigned_user)
+    @headers = headers(@task.user)
   end
 
   def test_should_create_comment_for_valid_request
@@ -19,6 +19,6 @@ class CommentsControllerTest < ActionDispatch::IntegrationTest
     post comments_path, params: { comment: { content: "", task_id: @task.id } }, headers: @headers
     assert_response :unprocessable_entity
     response_json = response.parsed_body
-    assert_equal response_json["error"], "Content can't be blank"
+    assert_equal response_json["errors"], "Content can't be blank"
   end
 end

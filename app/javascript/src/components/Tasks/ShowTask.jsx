@@ -93,7 +93,7 @@ const ShowTask = () => {
       </h2>
       <h2 className="pb-3 mb-3 text-md leading-5 text-bb-gray-600 text-opacity-50">
         <span>Created By : </span>
-        {task?.task_owner?.name}
+        {task?.task_creator}
       </h2>
       <Comments
         comments={task?.comments}

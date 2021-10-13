@@ -24,7 +24,7 @@ const EditTask = ({ history }) => {
       await tasksApi.update({
         slug,
         payload: {
-          task: { title, assigned_user_id: userId }
+          task: { title, user_id: userId }
         }
       });
       setLoading(false);

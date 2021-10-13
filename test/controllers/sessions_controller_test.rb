@@ -18,6 +18,6 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     post sessions_path, params: { login: { email: non_existent_email, password: "welcome" } }, as: :json
 
     assert_response :unauthorized
-    assert_equal response.parsed_body["error"], t("session.incorrect_credentials")
+    assert_equal response.parsed_body["notice"], t("session.incorrect_credentials")
   end
 end

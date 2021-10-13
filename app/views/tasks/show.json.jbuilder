@@ -7,8 +7,8 @@ json.task do
     :title
 
   json.assigned_user do
-    json.id @task.assigned_user.id
-    json.name @task.assigned_user.name
+    json.id @task.user.id
+    json.name @task.user.name
   end
 
   json.comments @comments do |comment|
@@ -18,8 +18,5 @@ json.task do
        :created_at
    end
 
-  json.task_owner do
-    json.extract! @task.task_owner,
-      :name
-  end
+  json.task_creator @task_creator
 end

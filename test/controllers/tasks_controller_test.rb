@@ -6,7 +6,7 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
   def setup
     @creator = create(:user)
     @assignee = create(:user)
-    @task = create(:task, assigned_user: @assignee, task_owner: @creator)
+    @task = create(:task, user: @assignee, creator_id: @creator.id)
     @creator_headers = headers(@creator)
     @assignee_headers = headers(@assignee)
   end
@@ -25,31 +25,28 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_should_create_valid_task
-    post tasks_path,
-      params: { task: { title: "Learn Ruby", task_owner_id: @creator.id, assigned_user_id: @assignee.id } },
-      headers: @creator_headers
+    post tasks_path, params: { task: { title: "Learn Ruby", user_id: @creator.id } }, headers: @creator_headers
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["notice"], t("successfully_created", entity: "Task")
   end
 
   def test_shouldnt_create_task_without_title
-    post tasks_path, params: { task: { title: "", task_owner_id: @creator.id, assigned_user_id: @assignee.id } },
-      headers: @creator_headers
+    post tasks_path, params: { task: { title: "", user_id: @creator.id } }, headers: @creator_headers
     assert_response :unprocessable_entity
     response_json = response.parsed_body
-    assert_equal response_json["error"], "Title can't be blank"
+    assert_equal response_json["errors"], "Title can't be blank"
   end
 
   def test_creator_can_update_any_task_fields
     new_title = "#{@task.title}-(updated)"
-    task_params = { task: { title: new_title, assigned_user_id: 1 } }
+    task_params = { task: { title: new_title, user_id: 1 } }
 
     put task_path(@task.slug), params: task_params, headers: @creator_headers
     assert_response :success
     @task.reload
     assert_equal @task.title, new_title
-    assert_equal @task.assigned_user_id, 1
+    assert_equal @task.user_id, 1
   end
 
   def test_should_destroy_task
@@ -69,7 +66,7 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
 
   def test_assignee_shouldnt_update_restricted_task_fields
     new_title = "#{@task.title}-(updated)"
-    task_params = { task: { title: new_title, assigned_user_id: 1 } }
+    task_params = { task: { title: new_title, user_id: 1 } }
 
     assert_no_changes -> { @task.reload.title } do
       put task_path(@task.slug), params: task_params, headers: @assignee_headers
@@ -102,6 +99,6 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
 
     get task_path(invalid_slug), headers: @creator_headers
     assert_response :not_found
-    assert_equal response.parsed_body["error"], t("task.not_found")
+    assert_equal response.parsed_body["error"], t("not_found", entity: "Task")
   end
 end

@@ -35,6 +35,6 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response :unprocessable_entity
-    assert_equal response.parsed_body["error"], "Password confirmation doesn't match Password"
+    assert_equal response.parsed_body["errors"], "Password confirmation doesn't match Password"
   end
 end

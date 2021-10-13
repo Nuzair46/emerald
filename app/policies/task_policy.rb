@@ -13,7 +13,7 @@ class TaskPolicy
   # Here the condition we want to check is that
   # whether the record's creator is current user or record is assigned to the current user.
   def show?
-    task.task_owner_id == user.id || task.assigned_user_id == user.id
+    task.creator_id == user.id || task.user_id == user.id
   end
 
   # The condition for edit policy is the same as that of the show.
@@ -22,9 +22,9 @@ class TaskPolicy
     show?
   end
 
-  # Only owner is allowed to update a task.
+  # Only creator is allowed to update a task.
   def update?
-    task.task_owner_id == user.id
+    show?
   end
 
   # Every user can create a task, hence create? will always returns true.
@@ -34,7 +34,7 @@ class TaskPolicy
 
   # Only the user that has created the task, can delete it.
   def destroy?
-    task.task_owner_id == user.id
+    task.creator_id == user.id
   end
 
   class Scope
@@ -46,7 +46,7 @@ class TaskPolicy
     end
 
     def resolve
-      scope.where(task_owner_id: user.id).or(scope.where(assigned_user_id: user.id))
+      scope.where(creator_id: user.id).or(scope.where(user_id: user.id))
     end
   end
 end

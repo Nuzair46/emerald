@@ -2,7 +2,7 @@ import React from "react";
 
 import PropTypes from "prop-types";
 
-import NavBar from "./NavBar";
+import NavBar from "components/NavBar";
 
 const Container = ({ children }) => {
   return (

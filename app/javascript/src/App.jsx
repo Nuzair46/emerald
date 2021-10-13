@@ -11,6 +11,7 @@ import Login from "components/Authentication/Login";
 import Signup from "components/Authentication/Signup";
 import PrivateRoute from "components/Common/PrivateRoute";
 import Dashboard from "components/Dashboard";
+import MyPreferences from "components/MyPreferences";
 import PageLoader from "components/PageLoader";
 import CreateTask from "components/Tasks/CreateTask";
 import EditTask from "components/Tasks/EditTask";
@@ -22,8 +23,8 @@ const App = () => {
   const isLoggedIn = !either(isNil, isEmpty)(authToken) && authToken !== "null";
 
   useEffect(() => {
-    registerIntercepts();
     initializeLogger();
+    registerIntercepts();
     setAuthHeaders(setLoading);
   }, []);
 
@@ -39,11 +40,13 @@ const App = () => {
     <Router>
       <ToastContainer />
       <Switch>
+        <Route exact path="/tasks/create" component={CreateTask} />
+        <Route exact path="/dashboard" component={Dashboard} />
         <Route exact path="/tasks/:slug/show" component={ShowTask} />
         <Route exact path="/tasks/:slug/edit" component={EditTask} />
-        <Route exact path="/tasks/create" component={CreateTask} />
         <Route exact path="/signup" component={Signup} />
         <Route exact path="/login" component={Login} />
+        <Route exact path="/my/preferences" component={MyPreferences} />
         <PrivateRoute
           path="/"
           redirectRoute="/login"
