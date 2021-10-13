@@ -39,6 +39,7 @@ group :development, :test do
 
   # For auto-generating demo data
   gem "faker"
+
 end
 
 group :development do
