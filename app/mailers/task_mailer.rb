@@ -5,6 +5,8 @@ class TaskMailer < ApplicationMailer
 
   def pending_tasks_email(receiver_id)
     @receiver = User.find(receiver_id)
+    return unless @receiver
+
     @tasks = @receiver.tasks.pending
     mail(to: @receiver.email, subject: "Pending Tasks")
   end
